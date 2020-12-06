@@ -9,7 +9,13 @@
       defer
     ></script>
     <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-	<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+  <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+  <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
+
+  <script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.css">
+
     <style type="text/css">
         /* Set the size of the div element that contains the map */
         #map {
@@ -28,6 +34,8 @@
     <h3>My Google Maps Demo</h3>
     <!--The div element for the map -->
    
+    <div id="color-picker"></div>
+           
     <div id="grid"></div>
     <button id="myBtn" >okayyy</button>
     <div id="map"></div>
