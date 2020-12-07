@@ -51,7 +51,7 @@ function addMarker(){
     
     var posArray = new Array();
     posArray = mygrid.getData();
-    
+    posArray = parsePosition(posArray);
       console.log(posArray);
 
       const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -59,7 +59,7 @@ function addMarker(){
   // Note: The code uses the JavaScript Array.prototype.map() method to
   // create an array of markers based on a given "locations" array.
   // The map() method here has nothing to do with the Google Maps API.
-  const markers = locations.map((location, i) => {
+  const markers = posArray.map((location, i) => {
     return new google.maps.Marker({
       position: location,
       label: labels[i % labels.length],
@@ -79,6 +79,7 @@ function initGrid(){
    mygrid = new Grid({
         el: document.getElementById('grid'),
         data: locations,
+        editingEvent:'click',
         showDummyRows: true,
         scrollY: true,
         bodyHeight:60,
@@ -99,7 +100,27 @@ function initGrid(){
             header: '경도',
             name: 'lng',
             editor: 'text'
+          },
+          {
+            header: '마커 색상',
+            name: 'color',
+            formatter: 'listItemText',
+            editor: {
+            type: 'select',
+            options: {
+              listItems: [
+                { text: 'Deluxe', value: '1' },
+                { text: 'EP', value: '2' },
+                { text: 'Single', value: '3' }
+              ]
+            }
           }
+          },
+          {
+            header: '추가 정보',
+            name: 'info',
+            editor: 'text'
+          },
         ]
       });
     
@@ -119,8 +140,18 @@ function initMap() {
   
 }
 
-function parsePosition(){
+function parsePosition(arrayData){
 
+  var positions = new Array();
+  var pos;
+  for(i=0; i<arrayData.length; i++){
+    pos = new Object();
+    pos.lat=Number(arrayData[i].lat);
+    pos.lng=Number(arrayData[i].lng);
+    positions.push(pos);
+  }
+
+  return positions;
 
 }
 
