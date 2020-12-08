@@ -3,66 +3,22 @@
 var map;
 const Grid = tui.Grid;
 var mygrid;
-
-class YourColorRenderer {
+interface CellRenderer {
+  getElement(): HTMLElement;
+  focused?(): void;
+  mounted?(parent: HTMLElement): void;
+  render(props: CellRendererProps): void;
+  beforeDestroy?(): void;
+}
+class MyColorRenderer {
   constructor(props) {
     const el = document.createElement('input');
     const { grid, rowKey, columnInfo } = props;
 
     el.type = 'color';
-    el.value="#dc9656";
-    console.log(el.value);
-    el.setAttribute('list','colors');
-    var colors = ["#ab4642","#dc9656", "#f7ca88", "#a1b56c", "#86c1b9", "#7cafc2", "#ba8baf"];
-    var colorList = document.createElement('datalist');
-    colorList.setAttribute('id','colors');
-    for( var i=0; i<colors.length; i++){
-      var option = document.createElement('option');
-      option.value = colors[i];
-      colorList.appendChild(option);
-    }
-    el.append(colorList);
-    el.addEventListener('input', () => {
-      grid.setValue(rowKey, columnInfo.name, el.value);
-      console.log(el.value);
-    });
-
-    this.el = el;
-    this.render(props);
-    el.setAttribute('value','#ab4642');
-
-  }
-  getElement() {
-    return this.el;
-  }
-
-  getValue() {
-    return this.el.value;
-  }
-
-  render(props) {
-    this.el.value = String(props.value);
-  }
-}
-
-class MyColorRenderer {
-  constructor(props) {
-    const el = document.createElement('button');
-    const { grid, rowKey, columnInfo } = props;
-
-    //el.type = 'color';
-    el.style.backgroundColor="#f7ca88";
-    el.style.width="20px";
-    el.style.height="10px";
     el.addEventListener('input', () => {
       grid.setValue(rowKey, columnInfo.name, el.value);
     });
-    
-    /*
-    var colorpicker2 = tui.colorPicker.create({
-      container: el,
-      preset : ["#ab4642","#dc9656", "#f7ca88", "#a1b56c", "#86c1b9", "#7cafc2", "#ba8baf"]
-  });*/
 
     this.el = el;
     this.render(props);
@@ -80,18 +36,14 @@ class MyColorRenderer {
     this.el.value = String(props.value);
   }
 }
-class CustomEditor {
+class CustomTextEditor {
   constructor(props) {
-    const el = document.createElement('button');
+    const el = document.createElement('input');
 
-    
+    el.type = 'text';
+    el.value = String(props.value);
 
     this.el = el;
-
-    el.addEventListener("click",alert("hii"));
-    
-
-
   }
 
   getElement() {
@@ -103,7 +55,7 @@ class CustomEditor {
   }
 
   mounted() {
-    //this.el.select();
+    this.el.select();
   }
 }
 const locations = [
@@ -140,7 +92,7 @@ window.onload=function(){
 
     initMap();
     initGrid();
-    //initColorPicker();
+    initColorPicker();
 
     
     
@@ -154,9 +106,8 @@ function addMarker(){
     
     var posArray = new Array();
     posArray = mygrid.getData();
-    console.log(posArray);
     posArray = parsePosition(posArray);
-      
+      console.log(posArray);
 
       const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   // Add some markers to the map.
@@ -208,18 +159,25 @@ function initGrid(){
           {
             header: '마커 색상',
             name: 'color',
-            renderer:{
-              type:YourColorRenderer,
-              options:{
-                list:'colors'
-              }
+            formatter: 'listItemText',
+            editor: {
+            type: 'select',
+            options: {
+              listItems: [
+                { text: 'Deluxe', value: '1' },
+                { text: 'EP', value: '2' },
+                { text: 'Single', value: '3' }
+              ]
             }
+          }
           },
           {
             header: '추가 정보',
             name: 'info',
-            editor : 'text'
-          }
+            renderer : {
+              type : MyColorRenderer
+            }
+          },
         ]
       });
     
