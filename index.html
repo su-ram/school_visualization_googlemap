@@ -3,6 +3,13 @@
   <head>
     <meta charset="UTF-8">
     <title>Add Map</title>
+<!--
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
+
+-->
+
+
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpDsCLnD7Z-FINT_3J-72hmWmMPZP9ewI&callback=initMap&libraries=&v=weekly"
@@ -13,10 +20,23 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
     <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
   <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+<!--
+  <link rel="stylesheet" href="jquery-ui-1.9.2.custom.css"/>
+  <script src="jquery-ui-1.9.2.custom.js"></script>
+  <script src="modernizr-custom.js"></script>
+-->
+ 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.js" integrity="sha512-1aNp9qKP+hKU/VJwCtYqJP9tdZWbMDN5pEEXXoXT0pTAxZq1HHZhNBR/dtTNSrHO4U1FsFGGILbqG1O9nl8Mdg==" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.css" integrity="sha512-KuSX+43gVS5MEIJD2ewtrFPOHqC1PJnL8o2f5ciggPC0JUZ8XV0QXlfArO1mSzKkVFdRjsBDfrTU96C5SuRfqQ==" crossorigin="anonymous" />
+    
 <script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.js"></script>
+<link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.css">
 
   
 
+    
+    
     <style type="text/css">
         /* Set the size of the div element that contains the map */
         #map {
@@ -25,6 +45,15 @@
           width: 100%;
           /* The width is the width of the web page */
         }
+       
+        .red.tui-grid-cell {background-color: #ab4642;}
+        .orange.tui-grid-cell {background-color: #dc9656;}
+        .yellow.tui-grid-cell {background-color: #f7ca88;}
+        .green.tui-grid-cell {background-color:#a1b56c;}
+        .blue.tui-grid-cell {background-color:#86c1b9;}
+        .navy.tui-grid-cell {background-color: #7cafc2;}
+        .purple.tui-grid-cell {background-color: #ba8baf;}
+        
       </style>
 
      
@@ -34,13 +63,18 @@
    
     <h3>My Google Maps Demo</h3>
     <!--The div element for the map -->
-    
+<div id="color-picker"></div>
+<input type='text'   style="background:black; width : 10px"/>
+
     <div id="grid"></div>
     <button id="myBtn" >조회하기</button>
     <input type="file" id="excelFile">
     <div id="map"></div>
+
+    
+    
   </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+  
   <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
   <script src="https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.js"></script>
   
