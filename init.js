@@ -143,7 +143,22 @@ window.onload = function () {
   initGrid();
   initColorPicker();
   //$.fn.spectrum.load = false;
+  $("input:text").click(function() {
+    $(this).parent().find("input:file").click();
+  });
 
+  
+  $("#excelFile2").click(function() {
+    $(this).parent().find("input:file").click();
+  });
+
+  
+  $('input:file', '.ui.action.input')
+    .on('change', function(e) {
+      var name = e.target.files[0].name;
+      $('input:text', $(e.target).parent()).val(name);
+    });
+  
   document.getElementById("myBtn").addEventListener("click", addMarker);
   document.getElementById("excelFile").addEventListener("change", handle_fr);
 
@@ -203,23 +218,39 @@ function addMarker() {
   var i;
 
   var _loop = function _loop() {
+
+    
     var contentString = '<h3>' + posArray[i].name + '</h3>' + posArray[i].info;
     var infowindow = new google.maps.InfoWindow({
       content: contentString
     });
     var location = { lat: posArray[i].lat, lng: posArray[i].lng };
-    var iconUrl = "http://www.googlemapsmarkers.com/v1/"+posArray[i].color.substr(1,6)+"/";
-    console.log(iconUrl);
+    
     var marker = new google.maps.Marker({
       position: location,
       map: map,
-      icon: {
-        url: iconUrl
-      }
+     
     });
-    marker.addListener("click", function () {
-      infowindow.open(map, marker);
-    });
+
+    if(posArray[i].color != null){
+
+      var iconUrl = "http://www.googlemapsmarkers.com/v1/"+posArray[i].color.substr(1,6)+"/";
+      marker.setIcon({url:iconUrl});
+
+    }
+    
+    if(posArray[i].info != null){
+
+      var contentString = '<h3>' + posArray[i].name + '</h3>' + posArray[i].info;
+      var infowindow = new google.maps.InfoWindow({
+        content: contentString
+      });
+
+      marker.addListener("click", function () {
+        infowindow.open(map, marker);
+      });
+
+    }
     markers.push(marker)
   };
 
@@ -235,8 +266,8 @@ function initGrid() {
   mygrid = new Grid({
     el: document.getElementById('grid'),
     data: locations,
-    bodyHeight: 50,
     editingEvent: 'click',
+    bodyHeight:150,
     showDummyRows: true,
     scrollY: true,
     rowHeaders: [
@@ -282,16 +313,22 @@ function initGrid() {
       header: '추가 정보',
       name: 'info',
       editor: 'text'
-    }]
+    }],
+    
+    pageOptions: {
+      useClient: true,
+      perPage: 5
+    }
+    
 
   });
+  
   mygrid.on('check', function(ev) {
     console.log('check', ev);
   });
-  
-  Grid.applyTheme('default'); // Call API of static method
+
  // mygrid.addColumnClassName('color','blue');
-  mygrid.resetData(locations);
+  
 }
 
 function initMap() {
@@ -403,8 +440,14 @@ function initColorPicker() {
 
   colorpicker.on('selectColor', function(ev) {
     
-    console.log(colorMap.get(ev.color));
+    var checkedRows = mygrid.getCheckedRowKeys();
+
     updateColor(mygrid.getCheckedRows(),ev.color);
+    var i;
+
+    for(i=0; i<checkedRows.length; i++){
+      mygrid.check(checkedRows[i]);
+    }
 });
 }
 
@@ -417,7 +460,7 @@ for(i=0; i<checkedRows.length; i++){
   index = checkedRows[i].rowKey;
   updateRow = mygrid.getRow(index);
   updateRow.color = color;
-  console.log(updateRow.color);
+ 
   updateRow._attributes={
     className: {
       
@@ -427,7 +470,10 @@ for(i=0; i<checkedRows.length; i++){
       }
     }
   };
+  
   mygrid.setRow(index,updateRow);
+
+  
   
 }
 

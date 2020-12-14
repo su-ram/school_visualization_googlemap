@@ -1,0 +1,16 @@
+#map {
+    height: 80%;
+    
+    width: 100%;
+    
+  }
+  
+  .red.tui-grid-cell {background-color: #ab4642;}
+  .orange.tui-grid-cell {background-color: #dc9656;}
+  .yellow.tui-grid-cell {background-color: #f7ca88;}
+  .green.tui-grid-cell {background-color:#a1b56c;}
+  .blue.tui-grid-cell {background-color:#86c1b9;}
+  .navy.tui-grid-cell {background-color: #7cafc2;}
+  .purple.tui-grid-cell {background-color: #ba8baf;}
+  
+  .ui.action.input input[type="file"] { display: none; }

@@ -33,46 +33,60 @@
 <script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.js"></script>
 <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.css">
 
+<link rel="stylesheet" href="Semantic-UI-CSS-master/semantic.css"/>
+<script src="Semantic-UI-CSS-master/semantic.js"></script>
   
 
-    
-    
-    <style type="text/css">
-        /* Set the size of the div element that contains the map */
-        #map {
-          height: 400px;
-          /* The height is 400 pixels */
-          width: 100%;
-          /* The width is the width of the web page */
-        }
-       
-        .red.tui-grid-cell {background-color: #ab4642;}
-        .orange.tui-grid-cell {background-color: #dc9656;}
-        .yellow.tui-grid-cell {background-color: #f7ca88;}
-        .green.tui-grid-cell {background-color:#a1b56c;}
-        .blue.tui-grid-cell {background-color:#86c1b9;}
-        .navy.tui-grid-cell {background-color: #7cafc2;}
-        .purple.tui-grid-cell {background-color: #ba8baf;}
-        
-      </style>
+<link rel="stylesheet" type="text/css" href="mycss.css"/>
 
      
    
   </head>
   <body>
+    
+  <div id="color-picker"></div>
    
-    <h3>My Google Maps Demo</h3>
-    <!--The div element for the map -->
-<div id="color-picker"></div>
-<input type='text'   style="background:black; width : 10px"/>
+    
+    
+   
+    <div class="ui grid">
+       <div class="thirteen wide column" id="grid"></div>
 
-    <div id="grid"></div>
-    <button id="myBtn" >조회하기</button>
-    <input type="file" id="excelFile">
-    <div id="map"></div>
+      <div class="center aligned three wide column">
+        
+        <div class="grey card">
+          <div class="content"> 
+      
+          
+
+
+          <div class="ui vertical menu">
+            <div class="item">
+              <div class="ui action input">
+                <input type="text" placeholder="엑셀파일 업로드" readonly>
+                <input type="file" id="excelFile" >
+                <div class="ui icon button" id="excelFile2">
+                  <i class="attach icon"></i>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+          <div class="blue ui bottom  attached button" id="myBtn">
+            조회하기
+          </div>
+        </div>
+      </div>
+     
+
+    </div>
 
     
     
+
+    
+     <div id="map"></div>
   </body>
   
   <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
