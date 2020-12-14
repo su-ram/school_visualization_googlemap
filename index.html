@@ -12,7 +12,7 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpDsCLnD7Z-FINT_3J-72hmWmMPZP9ewI&callback=initMap&libraries=&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCKdJjhVJcnFpYhG1VFQZecq-FEIbewnw&callback=initMap&libraries=&v=weekly"
       defer
     ></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
@@ -44,40 +44,44 @@
   </head>
   <body>
     
-  <div id="color-picker"></div>
-   
+  
     
     
    
-    <div class="ui grid">
-       <div class="thirteen wide column" id="grid"></div>
+    <div class="ui grid" style="padding: 10px;">
+       <div class="right aligned two wide column" style="margin: 0px; padding:0px; ">
+      
+        <div id="color-picker" align="right"></div>
+      
+      </div>
+       <div class="twelve wide column" id="grid" style="margin: 0px; padding:0px"></div>
 
-      <div class="center aligned three wide column">
+      <div class="center aligned two wide column" style="padding: 5px; margin: 0px;">
         
-        <div class="grey card">
-          <div class="content"> 
       
           
-
-
-          <div class="ui vertical menu">
-            <div class="item">
-              <div class="ui action input">
+              <div class="ui mini action input focus" style="width:100%;">
                 <input type="text" placeholder="엑셀파일 업로드" readonly>
                 <input type="file" id="excelFile" >
                 <div class="ui icon button" id="excelFile2">
                   <i class="attach icon"></i>
                 </div>
               </div>
-            </div>
-            
-          </div>
-        </div>
+           
+          
           <div class="blue ui bottom  attached button" id="myBtn">
             조회하기
-          </div>
-        </div>
       </div>
+
+
+
+
+
+
+
+
+        </div>
+          
      
 
     </div>

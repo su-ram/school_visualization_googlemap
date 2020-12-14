@@ -267,7 +267,7 @@ function initGrid() {
     el: document.getElementById('grid'),
     data: locations,
     editingEvent: 'click',
-    bodyHeight:150,
+    bodyHeight:180,
     showDummyRows: true,
     scrollY: true,
     rowHeaders: [
@@ -290,26 +290,30 @@ function initGrid() {
     columns: [{
       header: '학교명',
       name: 'name',
+      width:200,
       editor: 'text'
     }, {
       header: '위도',
       name: 'lat',
+      width:150,
       editor: 'text'
     }, {
       header: '경도',
       name: 'lng',
+      width:150,
       editor: 'text'
     }, {
       header: '마커 색상',
       name: 'color',
-      width:100
-      /*
-      renderer :{
-        type:MyColorRenderer,
-      }*/
-      
+      width:100  
 
-    }, {
+    }, 
+    {
+      header:'마커 색상',
+      name:'palette',
+      width:80
+    },
+    {
       header: '추가 정보',
       name: 'info',
       editor: 'text'
@@ -318,11 +322,14 @@ function initGrid() {
     pageOptions: {
       useClient: true,
       perPage: 5
+    },
+    columnOptions: {
+      resizable: true
     }
     
 
   });
-  
+  mygrid.hideColumn('color');
   mygrid.on('check', function(ev) {
     console.log('check', ev);
   });
@@ -364,6 +371,8 @@ function handleFile(e) {
 }
 
 function handle_fr(e) {
+
+  
   var files = e.target.files,
       f = files[0];
   var reader = new FileReader();
@@ -392,7 +401,7 @@ function handle_fr(e) {
           className: {
             
             column: {
-              color: [colorMap.get(data.color)]
+              palette: [colorMap.get(data.color)]
               
             }
           }
@@ -404,6 +413,10 @@ function handle_fr(e) {
     });
   };
   if (rABS) reader.readAsBinaryString(f);else reader.readAsArrayBuffer(f);
+
+  document.getElementById('excelFile').value='';
+
+
 }
 
 function parsePosition(arrayData) {
@@ -437,7 +450,7 @@ function initColorPicker() {
     preset : ['#ab4642', '#dc9656', '#f7ca88', '#a1b56c',
     '#86c1b9', '#7cafc2', '#ba8baf']
   });
-
+  //colorpicker.toggle(false);
   colorpicker.on('selectColor', function(ev) {
     
     var checkedRows = mygrid.getCheckedRowKeys();
@@ -465,7 +478,7 @@ for(i=0; i<checkedRows.length; i++){
     className: {
       
       column: {
-        color: [colorMap.get(color)]
+        palette: [colorMap.get(color)]
         
       }
     }
