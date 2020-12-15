@@ -46,32 +46,42 @@
     
   
     
-    
+    <input type="file" id="excelFile" >
    
-    <div class="ui grid" style="padding: 10px;">
-       <div class="right aligned two wide column" style="margin: 0px; padding:0px; ">
-      
+    <div class="ui grid" style="padding:10px;">
+       <div class="right aligned two wide column">
+        <div class="ui segment">
+          
+       
         <div id="color-picker" align="right"></div>
-      
+        <div  >
+          <p id="excelFileName"></p>
+        </div>
+       </div>
       </div>
-       <div class="twelve wide column" id="grid" style="margin: 0px; padding:0px"></div>
+       <div class="twelve wide column" id="grid" style="padding:0px;"></div>
 
-      <div class="center aligned two wide column" style="padding: 5px; margin: 0px;">
-        
-      
-          
-              <div class="ui mini action input focus" style="width:100%;">
-                <input type="text" placeholder="엑셀파일 업로드" readonly>
-                <input type="file" id="excelFile" >
-                <div class="ui icon button" id="excelFile2">
+      <div class="center aligned two wide column" style="padding-top:0px;">
+              
+       
+
+
+
+
+              <div class="ui vertical buttons" style="width:100%; height:100%;">
+               
+                
+                <button class="ui right labeled icon grey button" id="excelFile2">
                   <i class="attach icon"></i>
-                </div>
-              </div>
-           
+                  엑셀파일 업로드 
+                </button>
+              <button class="ui grey basic button" id="deleteChecked">선택삭제</button>
+              <button class="ui grey basic button" id="deleteAll">전체삭제</button>
+              <button class="ui blue button" id="myBtn">조회하기</button>
+            
+            
+            </div>
           
-          <div class="blue ui bottom  attached button" id="myBtn">
-            조회하기
-      </div>
 
 
 

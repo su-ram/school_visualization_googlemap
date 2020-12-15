@@ -125,16 +125,9 @@ color2Hex.set('파', '#86c1b9');
 color2Hex.set('남', '#7cafc2');
 color2Hex.set('보', '#ba8baf');
 
-var locations = [{ lat: -31.56391, lng: 147.154312,
-  _attributes: {
-    className: {
-      // Add class name on each columns
-      column: {
-        color: ['markerColor'],
-        
-      }
-    }
-  } }, { lat: -33.718234, lng: 150.363181 }, { lat: -33.727111, lng: 150.371124 }, { lat: -33.848588, lng: 151.209834 }, { lat: -33.851702, lng: 151.216968 }, { lat: -34.671264, lng: 150.863657 }, { lat: -35.304724, lng: 148.662905 }, { lat: -36.817685, lng: 175.699196 }, { lat: -36.828611, lng: 175.790222 }, { lat: -37.75, lng: 145.116667 }, { lat: -37.759859, lng: 145.128708 }, { lat: -37.765015, lng: 145.133858 }, { lat: -37.770104, lng: 145.143299 }, { lat: -37.7737, lng: 145.145187 }, { lat: -37.774785, lng: 145.137978 }, { lat: -37.819616, lng: 144.968119 }, { lat: -38.330766, lng: 144.695692 }, { lat: -39.927193, lng: 175.053218 }, { lat: -41.330162, lng: 174.865694 }, { lat: -42.734358, lng: 147.439506 }, { lat: -42.734358, lng: 147.501315 }, { lat: -42.735258, lng: 147.438 }, { lat: -43.999792, lng: 170.463352 }];
+var initGridData = new Array();
+
+var locations = [{ lat: -31.56391, lng: 147.154312}, { lat: -33.718234, lng: 150.363181 }, { lat: -33.727111, lng: 150.371124 }, { lat: -33.848588, lng: 151.209834 }, { lat: -33.851702, lng: 151.216968 }, { lat: -34.671264, lng: 150.863657 }, { lat: -35.304724, lng: 148.662905 }, { lat: -36.817685, lng: 175.699196 }, { lat: -36.828611, lng: 175.790222 }, { lat: -37.75, lng: 145.116667 }, { lat: -37.759859, lng: 145.128708 }, { lat: -37.765015, lng: 145.133858 }, { lat: -37.770104, lng: 145.143299 }, { lat: -37.7737, lng: 145.145187 }, { lat: -37.774785, lng: 145.137978 }, { lat: -37.819616, lng: 144.968119 }, { lat: -38.330766, lng: 144.695692 }, { lat: -39.927193, lng: 175.053218 }, { lat: -41.330162, lng: 174.865694 }, { lat: -42.734358, lng: 147.439506 }, { lat: -42.734358, lng: 147.501315 }, { lat: -42.735258, lng: 147.438 }, { lat: -43.999792, lng: 170.463352 }];
 
 window.onload = function () {
   console.log("call type............... 0");
@@ -142,42 +135,73 @@ window.onload = function () {
   initMap();
   initGrid();
   initColorPicker();
-  //$.fn.spectrum.load = false;
-  $("input:text").click(function() {
-    $(this).parent().find("input:file").click();
-  });
 
   
   $("#excelFile2").click(function() {
-    $(this).parent().find("input:file").click();
+    //$(this).parent().find("input:file").click();
+    $('#excelFile').click();
+
   });
 
   
   $('input:file', '.ui.action.input')
     .on('change', function(e) {
       var name = e.target.files[0].name;
-      $('input:text', $(e.target).parent()).val(name);
+      //$('input:text', $(e.target).parent()).val(name);
+      
     });
   
   document.getElementById("myBtn").addEventListener("click", addMarker);
   document.getElementById("excelFile").addEventListener("change", handle_fr);
+  document.getElementById('deleteChecked').addEventListener("click",deleteCheckedRows);
+  document.getElementById("deleteAll").addEventListener("click",deleteAllRows);
+
 
   
 };
 
-function renderColorPicker(myId) {
-  $('#'+myId).spectrum({
-    showPaletteOnly: true,
-    showPalette: true,
-    color: 'blanchedalmond',
-    palette: [['black', 'white', 'blanchedalmond', 'rgb(255, 128, 0);', 'hsv 100 70 50'], ['red', 'yellow', 'green', 'blue', 'violet']]
-  });
+function deleteCheckedRows(){
+
+
+  mygrid.removeCheckedRows();
+  deleteMarkers();
+  addMarker();
+
+}
+function deleteAllRows(){
+
+  mygrid.clear();
+  mygrid.resetData(createInitRows(0));
+  deleteMarkers();
+
 }
 
 
 
 
+function createInitRows(num){
+  var i;
+  var initRows = new Array();
+  var limit;
 
+  if (num == 0 ){
+
+    limit = 50; 
+
+  }else{
+    limit = num % 50;
+    limit = 50 - limit; 
+  }
+  for(i=0; i<limit; i++){
+    var row = new Object();
+   
+    row.lat = null;
+    row.lng=null;
+    initRows.push(row);
+  }
+
+  return initRows;
+}
 // Sets the map on all markers in the array.
 function setMapOnAll(map) {
   for (let i = 0; i < markers.length; i++) {
@@ -220,17 +244,29 @@ function addMarker() {
   var _loop = function _loop() {
 
     
-    var contentString = '<h3>' + posArray[i].name + '</h3>' + posArray[i].info;
+    var contentString = '<div id="siteNotice">' +
+    '<h3>' + posArray[i].name + '</h3>'+ 
+    '<p>'+
+    posArray[i].info+'</p>'+
+    '</div>';
     var infowindow = new google.maps.InfoWindow({
       content: contentString
     });
-    var location = { lat: posArray[i].lat, lng: posArray[i].lng };
+
+    var location;
+    var marker;
+
+    if(posArray[i].lat != null && posArray[i].lng != null){
     
-    var marker = new google.maps.Marker({
+      location = { lat: posArray[i].lat, lng: posArray[i].lng };
+    
+    
+      marker = new google.maps.Marker({
       position: location,
       map: map,
      
     });
+  }
 
     if(posArray[i].color != null){
 
@@ -265,8 +301,8 @@ function initGrid() {
 
   mygrid = new Grid({
     el: document.getElementById('grid'),
-    data: locations,
-    editingEvent: 'click',
+    data: createInitRows(0),
+    //editingEvent: 'click',
     bodyHeight:180,
     showDummyRows: true,
     scrollY: true,
@@ -311,7 +347,8 @@ function initGrid() {
     {
       header:'마커 색상',
       name:'palette',
-      width:80
+      width:80,
+      editor:'text'
     },
     {
       header: '추가 정보',
@@ -321,8 +358,10 @@ function initGrid() {
     
     pageOptions: {
       useClient: true,
-      perPage: 5
+      perPage: 50
     },
+    
+
     columnOptions: {
       resizable: true
     }
@@ -333,11 +372,46 @@ function initGrid() {
   mygrid.on('check', function(ev) {
     console.log('check', ev);
   });
+  mygrid.on('afterChange', function(ev){
+    pasteData(ev.changes);
+    console.log(ev);
+    grid.appendRows([{}]);
+  });
+  mygrid.on('paste',function(ev){
 
- // mygrid.addColumnClassName('color','blue');
-  
+    console.log(ev);
+
+  });
+
+
 }
+function pasteData(changes){
 
+  var i;
+  for(i=0; i<changes.length; i++){
+    if(changes[i].columnName == 'palette'){
+      var colorName = changes[i].value;
+      var row = mygrid.getRow(changes[i].rowKey);
+      row.color = color2Hex.get(colorName);
+      row._attributes={
+        className: {
+          
+          column: {
+            palette: [colorMap.get(row.color)]
+            
+          }
+        }
+      };
+
+      row.palette='';
+      console.log(row);
+      mygrid.setRow(changes[i].rowKey, row);
+    }
+
+   
+  }
+
+}
 function initMap() {
 
   var current = { lat: 37.511408804814025, lng: 127.04398602292653 };
@@ -375,6 +449,8 @@ function handle_fr(e) {
   
   var files = e.target.files,
       f = files[0];
+
+      $('#excelFileName').text(f.name);
   var reader = new FileReader();
   var rABS = !!reader.readAsBinaryString;
   reader.onload = function (e) {
@@ -410,6 +486,7 @@ function handle_fr(e) {
       }
       deleteMarkers();
       mygrid.resetData(exelData);
+      mygrid.appendRows(createInitRows(exelData.length));
     });
   };
   if (rABS) reader.readAsBinaryString(f);else reader.readAsArrayBuffer(f);
@@ -438,8 +515,11 @@ function parse2Number(arrayData) {
 
   var i;
   for (i = 0; i < arrayData.length; i++) {
-    arrayData[i].lat = Number(arrayData[i].lat);
-    arrayData[i].lng = Number(arrayData[i].lng);
+    if(arrayData[i].lat != null && arrayData[i].lng != null){
+      arrayData[i].lat = Number(arrayData[i].lat);
+      arrayData[i].lng = Number(arrayData[i].lng);
+    }
+    
   }
 }
 function initColorPicker() {
@@ -447,10 +527,10 @@ function initColorPicker() {
 
   var colorpicker = tui.colorPicker.create({
     container: result,
-    preset : ['#ab4642', '#dc9656', '#f7ca88', '#a1b56c',
-    '#86c1b9', '#7cafc2', '#ba8baf']
+    preset : ['#ab4642', '#dc9656', '#f7ca88','#a1b56c','#86c1b9', '#7cafc2','#ba8baf']
   });
-  //colorpicker.toggle(false);
+
+  
   colorpicker.on('selectColor', function(ev) {
     
     var checkedRows = mygrid.getCheckedRowKeys();
@@ -489,7 +569,6 @@ for(i=0; i<checkedRows.length; i++){
   
   
 }
-
 
 
 }
