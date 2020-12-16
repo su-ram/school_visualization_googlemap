@@ -138,10 +138,7 @@ window.onload = function () {
 
   
   $("#excelFile2").click(function() {
-    var fileinit = document.getElementById('excelFile').value;
-    console.log(fileinit);
-    
-    
+    //$(this).parent().find("input:file").click();
     $('#excelFile').click();
 
   });
@@ -151,7 +148,7 @@ window.onload = function () {
     .on('change', function(e) {
       var name = e.target.files[0].name;
       //$('input:text', $(e.target).parent()).val(name);
-      
+      $('#excelFileName').text(name);
     });
   
   document.getElementById("myBtn").addEventListener("click", addMarker);
@@ -165,17 +162,10 @@ window.onload = function () {
 
 function deleteCheckedRows(){
 
-//선택 삭제인 경우 처음/나중으로 경우의 수를 나눠야 함 
 
-if(markers.length == 0){
-
-  mygrid.removeCheckedRows();
-}else{
   mygrid.removeCheckedRows();
   deleteMarkers();
   addMarker();
-}
- 
 
 }
 function deleteAllRows(){
@@ -215,11 +205,7 @@ function createInitRows(num){
 // Sets the map on all markers in the array.
 function setMapOnAll(map) {
   for (let i = 0; i < markers.length; i++) {
-    if(markers[i] != null){
-      markers[i].setMap(map);
-
-    }
-    
+    markers[i].setMap(map);
   }
 }
 
@@ -241,7 +227,6 @@ function deleteMarkers() {
 
 function addMarker() {
 
-  deleteMarkers();
   var posArray = mygrid.getData();
   console.log(posArray);
   parse2Number(posArray);
@@ -285,15 +270,14 @@ function addMarker() {
 
     if(posArray[i].color != null){
 
-      var iconUrl = "https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|"+posArray[i].color.substr(1,6);
-      console.log(iconUrl);
+      var iconUrl = "http://www.googlemapsmarkers.com/v1/"+posArray[i].color.substr(1,6)+"/";
       marker.setIcon({url:iconUrl});
 
     }
     
     if(posArray[i].info != null){
 
-      var contentString = '<h3>' + posArray[i].name + '</h3>' + '<br>'+posArray[i].info;
+      var contentString = '<h3>' + posArray[i].name + '</h3>' + posArray[i].info;
       var infowindow = new google.maps.InfoWindow({
         content: contentString
       });
@@ -462,11 +446,10 @@ function handleFile(e) {
 
 function handle_fr(e) {
 
-  console.log(e.target.files);
+  
   var files = e.target.files,
       f = files[0];
 
-  $('#excelFileName').text(f.name);
   
   var reader = new FileReader();
   var rABS = !!reader.readAsBinaryString;
@@ -476,6 +459,8 @@ function handle_fr(e) {
     var wb = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
     wb.SheetNames.forEach(function (sheetName) {
       var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: ["name", "lat", "lng", "color", "info"] });
+      console.log(rowObj);
+
       var i;
       var exelData = new Array();
       var data;
@@ -504,11 +489,7 @@ function handle_fr(e) {
       mygrid.appendRows(createInitRows(exelData.length));
     });
   };
-  if (rABS) {
-    console.log("rABS");
-    reader.readAsBinaryString(f);
-  }else {console.log("not rABS"); 
-  reader.readAsArrayBuffer(f);}
+  if (rABS) reader.readAsBinaryString(f);else reader.readAsArrayBuffer(f);
 
   document.getElementById('excelFile').value='';
 
