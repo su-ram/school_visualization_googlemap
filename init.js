@@ -158,6 +158,7 @@ window.onload = function () {
   document.getElementById('deleteChecked').addEventListener("click",deleteCheckedRows);
   document.getElementById("deleteAll").addEventListener("click",deleteAllRows);
 
+  
 
   
 };
@@ -208,6 +209,8 @@ function createInitRows(num){
     row.lng=null;
     initRows.push(row);
   }
+
+
 
   return initRows;
 }
@@ -371,10 +374,7 @@ function initGrid() {
       editor: 'text'
     }],
     
-    pageOptions: {
-      useClient: true,
-      perPage: 50
-    },
+    
     
 
     columnOptions: {
@@ -387,16 +387,51 @@ function initGrid() {
   mygrid.on('check', function(ev) {
     console.log('check', ev);
   });
+
+
+ 
+  mygrid.on('beforeChange', function(ev){
+
+    
+    if(ev.origin == 'paste'){
+
+      var pastedRows = window.clipboardData.getData('Text').split('\n').length-1;
+      console.log(ev);
+      mygrid.resetData(createDummyRows(pastedRows));
+     
+
+    }
+      
+      
+    
+  });
   mygrid.on('afterChange', function(ev){
-    pasteData(ev.changes);
+
     console.log(ev);
-    mygrid.appendRows([{}]);
+    pasteData(ev.changes);
+    
   });
   mygrid.on('paste',function(ev){
 
     console.log(ev);
 
   });
+
+
+}
+function createDummyRows(num){
+
+
+  var i;
+  var dummyRows = new Array();
+
+  for(i=0; i< num; i++){
+
+    dummyRows.push(new Object());
+
+  }
+
+  return dummyRows;
 
 
 }
@@ -419,7 +454,7 @@ function pasteData(changes){
       };
 
       row.palette='';
-      console.log(row);
+      
       mygrid.setRow(changes[i].rowKey, row);
     }
 
@@ -504,9 +539,17 @@ function handle_fr(e) {
         };
         exelData.push(data);
       }
+
+      var dummyRows = 50 -(50%exelData.length);
+
+      console.log(dummyRows);
+
+      for(i=0; i<dummyRows; i++){
+        exelData.push([{}]);
+      }
       deleteMarkers();
       mygrid.resetData(exelData);
-      mygrid.appendRows(createInitRows(exelData.length));
+      //mygrid.appendRows(createInitRows(exelData.length));
     });
   };
   if (rABS) {
