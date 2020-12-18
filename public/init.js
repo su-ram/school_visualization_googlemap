@@ -130,7 +130,8 @@ var initGridData = new Array();
 var locations = [{ lat: -31.56391, lng: 147.154312}, { lat: -33.718234, lng: 150.363181 }, { lat: -33.727111, lng: 150.371124 }, { lat: -33.848588, lng: 151.209834 }, { lat: -33.851702, lng: 151.216968 }, { lat: -34.671264, lng: 150.863657 }, { lat: -35.304724, lng: 148.662905 }, { lat: -36.817685, lng: 175.699196 }, { lat: -36.828611, lng: 175.790222 }, { lat: -37.75, lng: 145.116667 }, { lat: -37.759859, lng: 145.128708 }, { lat: -37.765015, lng: 145.133858 }, { lat: -37.770104, lng: 145.143299 }, { lat: -37.7737, lng: 145.145187 }, { lat: -37.774785, lng: 145.137978 }, { lat: -37.819616, lng: 144.968119 }, { lat: -38.330766, lng: 144.695692 }, { lat: -39.927193, lng: 175.053218 }, { lat: -41.330162, lng: 174.865694 }, { lat: -42.734358, lng: 147.439506 }, { lat: -42.734358, lng: 147.501315 }, { lat: -42.735258, lng: 147.438 }, { lat: -43.999792, lng: 170.463352 }];
 
 window.onload = function () {
- 
+  console.log("call type............... 0");
+
   initMap();
   initGrid();
 
@@ -145,39 +146,30 @@ window.onload = function () {
   });
 
   
-<<<<<<< HEAD
  
-=======
-  $('input:file', '.ui.action.input')
-    .on('change', function(e) {
-      var name = e.target.files[0].name;
-      //$('input:text', $(e.target).parent()).val(name);
-      
-    });
-  
->>>>>>> 88972422b92a62dc2544dde9f895c9037df4b2e6
   document.getElementById("myBtn").addEventListener("click", addMarker);
   document.getElementById("excelFile").addEventListener("change", handle_fr);
   document.getElementById('deleteChecked').addEventListener("click",deleteCheckedRows);
-  document.getElementById("deleteAll").addEventListener("click",deleteAllRows);
+  //document.getElementById("deleteAll").addEventListener("click",deleteAllRows);
+
+  var dd = document.createElement("button");
+  dd.setAttribute('class','mini ui right floated button');
+  //dd.setAttribute('id','tjsxortkrwp');
+  dd.appendChild(document.createTextNode( '선택삭제' ));
 
 
+ 
+  $('.tui-pagination, .tui-grid-pagination').attr('id','hihi');
+  document.getElementById('hihi').appendChild(dd);
   
 };
 
 function deleteCheckedRows(){
 
 //선택 삭제인 경우 처음/나중으로 경우의 수를 나눠야 함 
-<<<<<<< HEAD
-=======
-
-if(markers.length == 0){
->>>>>>> 88972422b92a62dc2544dde9f895c9037df4b2e6
 
 if(markers.length == 0){
 
-  mygrid.removeCheckedRows();
-}else{
   mygrid.removeCheckedRows();
 }else{
   mygrid.removeCheckedRows();
@@ -192,7 +184,7 @@ function deleteAllRows(){
   mygrid.clear();
   mygrid.resetData(createInitRows(0));
   deleteMarkers();
-  $('#excelFileName').text('');
+
 }
 
 
@@ -353,19 +345,23 @@ function initGrid() {
       height: 35
     },
     columns: [{
+      header: '추가 정보',
+      name: 'info',
+      editor: 'text'
+    },
+    {
       header: '학교명',
       name: 'name',
-      width:150,
       editor: 'text'
     }, {
       header: '위도',
       name: 'lat',
-      width:80,
+      
       editor: 'text'
     }, {
       header: '경도',
       name: 'lng',
-      width:80,
+      
       editor: 'text'
     }, {
       header: '마커 색상',
@@ -378,12 +374,8 @@ function initGrid() {
       name:'palette',
       width:50,
       editor:'text'
-    },
-    {
-      header: '추가 정보',
-      name: 'info',
-      editor: 'text'
-    }],
+    }
+    ],
     
     pageOptions: {
       useClient: true,
@@ -398,7 +390,7 @@ function initGrid() {
 
   });
   mygrid.hideColumn('color');
-  //mygrid.hideColumn('info');
+  mygrid.hideColumn('info');
   mygrid.on('check', function(ev) {
     console.log('check', ev);
   });
@@ -470,23 +462,16 @@ function handleFile(e) {
 
 function handle_fr(e) {
 
-<<<<<<< HEAD
   console.log(e.target.files);
-  var files = e.target.files,
-      f = files[0];
-
-=======
   var files = e.target.files;
-
- 
-  if(files.length == 0){
+      
+    
+  if(files.length == 0 ){
     return;
   }
-
+  
   var f = files[0];
 
-  
->>>>>>> 88972422b92a62dc2544dde9f895c9037df4b2e6
   $('#excelFileName').text(f.name);
   
   var reader = new FileReader();
@@ -526,18 +511,10 @@ function handle_fr(e) {
     });
   };
   if (rABS) {
-<<<<<<< HEAD
     console.log("rABS");
     reader.readAsBinaryString(f);
   }else {console.log("not rABS"); 
   reader.readAsArrayBuffer(f);}
-=======
-    
-    reader.readAsBinaryString(f);
-  }else { 
-  reader.readAsArrayBuffer(f);
-}
->>>>>>> 88972422b92a62dc2544dde9f895c9037df4b2e6
 
   document.getElementById('excelFile').value='';
 
