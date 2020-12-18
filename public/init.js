@@ -134,23 +134,19 @@ window.onload = function () {
 
   initMap();
   initGrid();
-  initColorPicker();
 
   
   $("#excelFile2").click(function() {
-    //$(this).parent().find("input:file").click();
+    var fileinit = document.getElementById('excelFile').value;
+    console.log(fileinit);
+    
+    
     $('#excelFile').click();
 
   });
 
   
-  $('input:file', '.ui.action.input')
-    .on('change', function(e) {
-      var name = e.target.files[0].name;
-      //$('input:text', $(e.target).parent()).val(name);
-      $('#excelFileName').text(name);
-    });
-  
+ 
   document.getElementById("myBtn").addEventListener("click", addMarker);
   document.getElementById("excelFile").addEventListener("change", handle_fr);
   document.getElementById('deleteChecked').addEventListener("click",deleteCheckedRows);
@@ -162,10 +158,17 @@ window.onload = function () {
 
 function deleteCheckedRows(){
 
+//선택 삭제인 경우 처음/나중으로 경우의 수를 나눠야 함 
 
+if(markers.length == 0){
+
+  mygrid.removeCheckedRows();
+}else{
   mygrid.removeCheckedRows();
   deleteMarkers();
   addMarker();
+}
+ 
 
 }
 function deleteAllRows(){
@@ -205,7 +208,11 @@ function createInitRows(num){
 // Sets the map on all markers in the array.
 function setMapOnAll(map) {
   for (let i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
+    if(markers[i] != null){
+      markers[i].setMap(map);
+
+    }
+    
   }
 }
 
@@ -227,6 +234,7 @@ function deleteMarkers() {
 
 function addMarker() {
 
+  deleteMarkers();
   var posArray = mygrid.getData();
   console.log(posArray);
   parse2Number(posArray);
@@ -270,14 +278,15 @@ function addMarker() {
 
     if(posArray[i].color != null){
 
-      var iconUrl = "http://www.googlemapsmarkers.com/v1/"+posArray[i].color.substr(1,6)+"/";
+      var iconUrl = "https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|"+posArray[i].color.substr(1,6);
+      console.log(iconUrl);
       marker.setIcon({url:iconUrl});
 
     }
     
     if(posArray[i].info != null){
 
-      var contentString = '<h3>' + posArray[i].name + '</h3>' + posArray[i].info;
+      var contentString = '<h3>' + posArray[i].name + '</h3>' + '<br>'+posArray[i].info;
       var infowindow = new google.maps.InfoWindow({
         content: contentString
       });
@@ -299,11 +308,15 @@ function addMarker() {
 
 function initGrid() {
 
+
+  var parentWidth = $('#firstClm').height();
+  console.log(parentWidth);
+
+
   mygrid = new Grid({
     el: document.getElementById('grid'),
-    data: createInitRows(0),
-    //editingEvent: 'click',
-    bodyHeight:180,
+    data: [{}],
+    bodyHeight:parentWidth*0.8,
     showDummyRows: true,
     scrollY: true,
     rowHeaders: [
@@ -326,17 +339,17 @@ function initGrid() {
     columns: [{
       header: '학교명',
       name: 'name',
-      width:200,
+      width:150,
       editor: 'text'
     }, {
       header: '위도',
       name: 'lat',
-      width:150,
+      width:80,
       editor: 'text'
     }, {
       header: '경도',
       name: 'lng',
-      width:150,
+      width:80,
       editor: 'text'
     }, {
       header: '마커 색상',
@@ -345,9 +358,9 @@ function initGrid() {
 
     }, 
     {
-      header:'마커 색상',
+      header:'색상',
       name:'palette',
-      width:80,
+      width:50,
       editor:'text'
     },
     {
@@ -369,6 +382,7 @@ function initGrid() {
 
   });
   mygrid.hideColumn('color');
+  //mygrid.hideColumn('info');
   mygrid.on('check', function(ev) {
     console.log('check', ev);
   });
@@ -416,15 +430,9 @@ function initMap() {
 
   var current = { lat: 37.511408804814025, lng: 127.04398602292653 };
   map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 12,
+    zoom: 7,
     center: current
   });
-
-  new google.maps.Marker({
-    position: current,
-    map: map
-  });
-
   // Create an array of alphabetical characters used to label the markers.
 }
 
@@ -446,10 +454,11 @@ function handleFile(e) {
 
 function handle_fr(e) {
 
-  
+  console.log(e.target.files);
   var files = e.target.files,
       f = files[0];
 
+  $('#excelFileName').text(f.name);
   
   var reader = new FileReader();
   var rABS = !!reader.readAsBinaryString;
@@ -459,8 +468,6 @@ function handle_fr(e) {
     var wb = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
     wb.SheetNames.forEach(function (sheetName) {
       var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: ["name", "lat", "lng", "color", "info"] });
-      console.log(rowObj);
-
       var i;
       var exelData = new Array();
       var data;
@@ -489,7 +496,11 @@ function handle_fr(e) {
       mygrid.appendRows(createInitRows(exelData.length));
     });
   };
-  if (rABS) reader.readAsBinaryString(f);else reader.readAsArrayBuffer(f);
+  if (rABS) {
+    console.log("rABS");
+    reader.readAsBinaryString(f);
+  }else {console.log("not rABS"); 
+  reader.readAsArrayBuffer(f);}
 
   document.getElementById('excelFile').value='';
 
@@ -521,27 +532,6 @@ function parse2Number(arrayData) {
     }
     
   }
-}
-function initColorPicker() {
-  var result = document.getElementById('color-picker');
-
-  var colorpicker = tui.colorPicker.create({
-    container: result,
-    preset : ['#ab4642', '#dc9656', '#f7ca88','#a1b56c','#86c1b9', '#7cafc2','#ba8baf']
-  });
-
-  
-  colorpicker.on('selectColor', function(ev) {
-    
-    var checkedRows = mygrid.getCheckedRowKeys();
-
-    updateColor(mygrid.getCheckedRows(),ev.color);
-    var i;
-
-    for(i=0; i<checkedRows.length; i++){
-      mygrid.check(checkedRows[i]);
-    }
-});
 }
 
 function updateColor(checkedRows,color){

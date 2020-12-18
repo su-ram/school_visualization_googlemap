@@ -134,7 +134,6 @@ window.onload = function () {
 
   initMap();
   initGrid();
-  initColorPicker();
 
   
   $("#excelFile2").click(function() {
@@ -147,19 +146,21 @@ window.onload = function () {
   });
 
   
-  $('input:file', '.ui.action.input')
-    .on('change', function(e) {
-      var name = e.target.files[0].name;
-      //$('input:text', $(e.target).parent()).val(name);
-      
-    });
-  
+ 
   document.getElementById("myBtn").addEventListener("click", addMarker);
   document.getElementById("excelFile").addEventListener("change", handle_fr);
   document.getElementById('deleteChecked').addEventListener("click",deleteCheckedRows);
-  document.getElementById("deleteAll").addEventListener("click",deleteAllRows);
+  //document.getElementById("deleteAll").addEventListener("click",deleteAllRows);
+
+  var dd = document.createElement("button");
+  dd.setAttribute('class','mini ui right floated button');
+  //dd.setAttribute('id','tjsxortkrwp');
+  dd.appendChild(document.createTextNode( '선택삭제' ));
 
 
+ 
+  $('.tui-pagination, .tui-grid-pagination').attr('id','hihi');
+  document.getElementById('hihi').appendChild(dd);
   
 };
 
@@ -315,11 +316,15 @@ function addMarker() {
 
 function initGrid() {
 
+
+  var parentWidth = $('#firstClm').height();
+  console.log(parentWidth);
+
+
   mygrid = new Grid({
     el: document.getElementById('grid'),
-    data: createInitRows(0),
-    //editingEvent: 'click',
-    bodyHeight:180,
+    data: [{}],
+    bodyHeight:parentWidth*0.8,
     showDummyRows: true,
     scrollY: true,
     rowHeaders: [
@@ -340,19 +345,23 @@ function initGrid() {
       height: 35
     },
     columns: [{
+      header: '추가 정보',
+      name: 'info',
+      editor: 'text'
+    },
+    {
       header: '학교명',
       name: 'name',
-      width:200,
       editor: 'text'
     }, {
       header: '위도',
       name: 'lat',
-      width:150,
+      
       editor: 'text'
     }, {
       header: '경도',
       name: 'lng',
-      width:150,
+      
       editor: 'text'
     }, {
       header: '마커 색상',
@@ -361,16 +370,12 @@ function initGrid() {
 
     }, 
     {
-      header:'마커 색상',
+      header:'색상',
       name:'palette',
-      width:80,
+      width:50,
       editor:'text'
-    },
-    {
-      header: '추가 정보',
-      name: 'info',
-      editor: 'text'
-    }],
+    }
+    ],
     
     pageOptions: {
       useClient: true,
@@ -385,6 +390,7 @@ function initGrid() {
 
   });
   mygrid.hideColumn('color');
+  mygrid.hideColumn('info');
   mygrid.on('check', function(ev) {
     console.log('check', ev);
   });
@@ -432,15 +438,9 @@ function initMap() {
 
   var current = { lat: 37.511408804814025, lng: 127.04398602292653 };
   map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 12,
+    zoom: 7,
     center: current
   });
-
-  new google.maps.Marker({
-    position: current,
-    map: map
-  });
-
   // Create an array of alphabetical characters used to label the markers.
 }
 
@@ -463,8 +463,14 @@ function handleFile(e) {
 function handle_fr(e) {
 
   console.log(e.target.files);
-  var files = e.target.files,
-      f = files[0];
+  var files = e.target.files;
+      
+    
+  if(files.length == 0 ){
+    return;
+  }
+  
+  var f = files[0];
 
   $('#excelFileName').text(f.name);
   
@@ -540,27 +546,6 @@ function parse2Number(arrayData) {
     }
     
   }
-}
-function initColorPicker() {
-  var result = document.getElementById('color-picker');
-
-  var colorpicker = tui.colorPicker.create({
-    container: result,
-    preset : ['#ab4642', '#dc9656', '#f7ca88','#a1b56c','#86c1b9', '#7cafc2','#ba8baf']
-  });
-
-  
-  colorpicker.on('selectColor', function(ev) {
-    
-    var checkedRows = mygrid.getCheckedRowKeys();
-
-    updateColor(mygrid.getCheckedRows(),ev.color);
-    var i;
-
-    for(i=0; i<checkedRows.length; i++){
-      mygrid.check(checkedRows[i]);
-    }
-});
 }
 
 function updateColor(checkedRows,color){
