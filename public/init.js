@@ -108,6 +108,7 @@ var map;
 var Grid = tui.Grid;
 var mygrid;
 var markers = [];
+var markerCluster; 
 var colorMap = new Map()
 colorMap.set('#ab4642','red');
 colorMap.set('#dc9656', 'orange');
@@ -247,14 +248,9 @@ function addMarker() {
   console.log(posArray);
   parse2Number(posArray);
 
-  var labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
  
-  /*
-  new MarkerClusterer(map, markers, {
-    imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
-  });
-  */
-
+  if(markerCluster){
+    markerCluster.clearMarkers();}
   var i;
 
   var _loop = function _loop() {
@@ -311,9 +307,51 @@ function addMarker() {
     _loop();
   }
 
+ 
+  markerCluster.addMarkers(markers);
+  markerCluster.repaint();
+  
+  
  // showMarkers();
 }
+function parseLocations(arr){
 
+  var locationsArr = new Array();
+  var i; 
+
+  for(i=0; i<arr.length; i++){
+
+    if(arr[i].lat != null && arr[i].lng != null){
+
+      var data = new Object();
+      data.lat = arr[i].lat;
+      data.lng = arr[i].lng;
+  
+      locationsArr.push(data);
+
+    }
+   
+  }
+
+  console.log(locationsArr);
+  return locationsArr;
+
+}
+function addMarkerCluster(arr){
+
+
+
+  markers = parseLocations(arr).map(function (location, i) {
+    return new google.maps.Marker({
+      position: location,
+
+    });
+  });
+  console.log(markers);
+
+  
+
+}
 function initGrid() {
 
 
@@ -323,7 +361,7 @@ function initGrid() {
 
   mygrid = new Grid({
     el: document.getElementById('grid'),
-    data: [{}],
+    data: locations,
     bodyHeight:parentWidth*0.8,
     showDummyRows: true,
     scrollY: true,
@@ -397,7 +435,7 @@ function initGrid() {
   mygrid.on('afterChange', function(ev){
     pasteData(ev.changes);
     console.log(ev);
-    mygrid.appendRows([{}]);
+    
   });
   mygrid.on('paste',function(ev){
 
@@ -441,6 +479,15 @@ function initMap() {
     zoom: 7,
     center: current
   });
+
+ 
+  markerCluster = new MarkerClusterer(map, markers, {
+    imagePath:
+      "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+  });
+  
+
+  
   // Create an array of alphabetical characters used to label the markers.
 }
 
@@ -507,13 +554,13 @@ function handle_fr(e) {
       }
       deleteMarkers();
       mygrid.resetData(exelData);
-      mygrid.appendRows(createInitRows(exelData.length));
+      //mygrid.appendRows(createInitRows(exelData.length));
     });
   };
   if (rABS) {
-    console.log("rABS");
+    
     reader.readAsBinaryString(f);
-  }else {console.log("not rABS"); 
+  }else {
   reader.readAsArrayBuffer(f);}
 
   document.getElementById('excelFile').value='';
