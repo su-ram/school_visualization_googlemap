@@ -161,7 +161,7 @@ window.onload = function () {
 
  
   $('.tui-pagination, .tui-grid-pagination').attr('id','hihi');
-  document.getElementById('hihi').appendChild(dd);
+  //document.getElementById('hihi').appendChild(dd);
   
 };
 
@@ -355,14 +355,14 @@ function addMarkerCluster(arr){
 function initGrid() {
 
 
-  var parentWidth = $('#firstClm').height();
+  var parentWidth = $('#grid').height();
   console.log(parentWidth);
 
 
   mygrid = new Grid({
     el: document.getElementById('grid'),
     data: locations,
-    bodyHeight:parentWidth*0.8,
+    bodyHeight:parentWidth-115,
     showDummyRows: true,
     scrollY: true,
     rowHeaders: [
@@ -434,7 +434,7 @@ function initGrid() {
   });
   mygrid.on('afterChange', function(ev){
     pasteData(ev.changes);
-    console.log(ev);
+    console.log('something changed!!');
     
   });
   mygrid.on('paste',function(ev){

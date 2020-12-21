@@ -46,7 +46,7 @@
     
   
     
-    <input type="file" id="excelFile" >
+   
     <p id="excelFileName">엑셀파일명</p>
     
 
@@ -55,24 +55,26 @@
      
       <div class="row" style="height: 100%;">
         <div class="eight wide column" >
-          <div class="row">
-             <div class="ui buttons" style="width: 100%; padding: 2px;">
+          <div id="buttons" class="ui buttons" style="width: 100%; padding: 2px;">
                    
-                    <button class="ui right labeled icon grey button" id="excelFile2">
-                      <i class="attach icon"></i>
-                      엑셀파일 업로드 
-                    </button>
-                  <button class="ui grey basic button" id="downloadTemplate" style="border-radius: 0rem;">엑셀양식 다운로드</button>
-                  <button class="ui grey basic button" id="deleteChecked">선택삭제</button>
-                  
-                  <button class="ui blue button" id="myBtn">조회하기</button>
-                
-                </div>
-          </div>
-          <div class="row" id = "firstClm" style="height: 100%;">
+            <button class="ui right labeled icon grey button" id="excelFile2">
+              <i class="attach icon"></i>
+              엑셀파일 업로드 
+            </button>
+          <button class="ui grey basic button" id="downloadTemplate" onclick = "location.href= 'test.xlsx'" download="my.xlsx" style="border-radius: 0rem;">엑셀양식 다운로드</button>
+          <button class="ui grey basic button" id="deleteChecked">선택삭제</button>
+          
+          <button class="ui blue button" id="myBtn">조회하기</button>
+        
+        </div>
+         
 
         <div id="grid" style="height: 100%;"></div>
-          </div>
+
+        
+       
+
+          
           
           
           </div>
@@ -95,9 +97,9 @@
 
     
     
-
     
     
+    <input type="file" id="excelFile" >
   </body>
   
   <script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>

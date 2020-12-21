@@ -30,6 +30,24 @@ body {
     line-height: 30px;
     padding-left: 10px;
   }
+
+  #buttons{
+      z-index: 5;
+  }
+  #delete-some{
+   
+        position: absolute;
+        bottom: 0px;
+        right: 0%;
+        z-index: 5;
+        
+        border-radius: 0.1rem;
+        
+
+        text-align: center;
+        
+      
+  }
   .red.tui-grid-cell {background-color: #ab4642;}
   .orange.tui-grid-cell {background-color: #dc9656;}
   .yellow.tui-grid-cell {background-color: #f7ca88;}
