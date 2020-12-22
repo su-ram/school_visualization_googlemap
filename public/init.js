@@ -158,7 +158,7 @@ window.onload = function () {
 function downloadTemplate(){
   var url = "http://localhost:8080/suram/template.xlsx";
 
-  /* set up async GET request */
+  
   var req = new XMLHttpRequest();
   req.open("GET", url, true);
   req.responseType = "arraybuffer";
@@ -378,7 +378,7 @@ function initGrid() {
   mygrid = new Grid({
     el: document.getElementById('grid'),
     data: locations,
-    bodyHeight:parentWidth-115,
+    bodyHeight:parentWidth-125,
     showDummyRows: true,
     scrollY: true,
     rowHeaders: [
