@@ -138,32 +138,48 @@ window.onload = function () {
 
   
   $("#excelFile2").click(function() {
-    var fileinit = document.getElementById('excelFile').value;
-    console.log(fileinit);
-    
+    var fileinit = document.getElementById('excelFile').value;  
     
     $('#excelFile').click();
 
   });
+
 
   
  
   document.getElementById("myBtn").addEventListener("click", addMarker);
   document.getElementById("excelFile").addEventListener("change", handle_fr);
   document.getElementById('deleteChecked').addEventListener("click",deleteCheckedRows);
-  //document.getElementById("deleteAll").addEventListener("click",deleteAllRows);
-
-  var dd = document.createElement("button");
-  dd.setAttribute('class','mini ui right floated button');
-  //dd.setAttribute('id','tjsxortkrwp');
-  dd.appendChild(document.createTextNode( '선택삭제' ));
-
-
- 
-  $('.tui-pagination, .tui-grid-pagination').attr('id','hihi');
-  //document.getElementById('hihi').appendChild(dd);
+  document.getElementById('downloadTemplate').addEventListener("click",downloadTemplate);
+  
   
 };
+
+function downloadTemplate(){
+  var url = "http://localhost:8080/suram/template.xlsx";
+
+  /* set up async GET request */
+  var req = new XMLHttpRequest();
+  req.open("GET", url, true);
+  req.responseType = "arraybuffer";
+  
+  req.onload = function(e) {
+    var data = new Uint8Array(req.response);
+    var workbook = XLSX.read(data, {type:"array"});
+    var wopts = { bookType:'xlsx', bookSST:false, type:'array' };
+    workbook = XLSX.write(workbook,wopts);
+    window.navigator.msSaveOrOpenBlob(new Blob([workbook],{type:"application/octet-stream"}),'엑셀파일양식.xlsx');
+
+
+    /* DO SOMETHING WITH workbook HERE */
+  }
+  
+  req.send();
+
+
+
+
+}
 
 function deleteCheckedRows(){
 
@@ -245,7 +261,7 @@ function addMarker() {
 
   deleteMarkers();
   var posArray = mygrid.getData();
-  console.log(posArray);
+ 
   parse2Number(posArray);
 
  
@@ -283,7 +299,7 @@ function addMarker() {
     if(posArray[i].color != null){
 
       var iconUrl = "https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|"+posArray[i].color.substr(1,6);
-      console.log(iconUrl);
+     
       marker.setIcon({url:iconUrl});
 
     }
@@ -411,7 +427,7 @@ function initGrid() {
       header:'색상',
       name:'palette',
       width:50,
-      editor:'text'
+      
     }
     ],
     
@@ -527,6 +543,7 @@ function handle_fr(e) {
     var data = e.target.result;
     if (!rABS) data = new Uint8Array(data);
     var wb = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
+    console.log(wb);
     wb.SheetNames.forEach(function (sheetName) {
       var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: ["name", "lat", "lng", "color", "info"] });
       var i;
