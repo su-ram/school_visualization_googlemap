@@ -3,12 +3,6 @@
   <head>
     <meta charset="UTF-8">
     <title>Add Map</title>
-<!--
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
-
--->
-
 
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <script
@@ -20,22 +14,9 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
     <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
   <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-<!--
-  <link rel="stylesheet" href="jquery-ui-1.9.2.custom.css"/>
-  <script src="jquery-ui-1.9.2.custom.js"></script>
-  <script src="modernizr-custom.js"></script>
--->
- 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.js" integrity="sha512-1aNp9qKP+hKU/VJwCtYqJP9tdZWbMDN5pEEXXoXT0pTAxZq1HHZhNBR/dtTNSrHO4U1FsFGGILbqG1O9nl8Mdg==" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.css" integrity="sha512-KuSX+43gVS5MEIJD2ewtrFPOHqC1PJnL8o2f5ciggPC0JUZ8XV0QXlfArO1mSzKkVFdRjsBDfrTU96C5SuRfqQ==" crossorigin="anonymous" />
-    
-<script src="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.js"></script>
-<link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-color-picker/latest/tui-color-picker.css">
-
-<link rel="stylesheet" href="Semantic-UI-master/dist/semantic.min.css"/>
-<script src="Semantic-UI-master/dist/semantic.min.js"></script>
-  
+<link href= 
+"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+              rel="stylesheet" /> 
 
 <link rel="stylesheet" type="text/css" href="mycss.css"/>
 
@@ -92,24 +73,24 @@
             
             <div id="floating-panel">
 
-             
+             <!--
                 <div class="inline fields">
                   SW교육 선도 학교(2020)
                   <div class="field">
                     <div class="ui radio checkbox">
-                      <input type="radio" name="frequency">
+                      <input type="radio">
                       <label>전체</label>
                     </div>
                   </div>
                   <div class="field">
                     <div class="ui radio checkbox">
-                      <input type="radio" name="frequency">
+                      <input type="radio">
                       <label>초등학교</label>
                     </div>
                   </div>
                   <div class="field">
                     <div class="ui radio checkbox">
-                      <input type="radio" name="frequency">
+                      <input type="radio">
                       <label>중학교</label>
                     </div>
                   </div>
@@ -120,8 +101,40 @@
                     </div>
                   </div>
                 </div>
-              
+              -->
 
+              
+            <div class="grouped fields"> 
+              <label for="branch"><b>SW교육 선도학교(2020)</b></label> 
+              <div class="field"> 
+                <div class="ui radio checkbox"> 
+                  <input type="radio" name="branch" 
+                         checked="true" tabindex="0" class="hidden"> 
+                  <label>전체</label> 
+                </div> 
+              </div> 
+              <div class="field"> 
+                <div class="ui radio checkbox"> 
+                  <input type="radio" name="branch" 
+                         tabindex="1" class="hidden"> 
+                  <label>초등학교</label> 
+                </div> 
+              </div> 
+              <div class="field"> 
+                <div class="ui radio checkbox"> 
+                  <input type="radio" name="branch"
+                         tabindex="2" class="hidden"> 
+                  <label>중학교</label> 
+                </div> 
+              </div> 
+              <div class="field"> 
+                <div class="ui radio checkbox"> 
+                  <input type="radio" name="branch"
+                         tabindex="3" class="hidden"> 
+                  <label>고등학교</label> 
+                </div> 
+              </div> 
+            </div> 
               
           </div>
             <div id="map">
@@ -144,7 +157,9 @@
   <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
  
   <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-  
+  <script src= 
+"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"> 
+        </script> 
   <script src = "./init.js"></script>
   
 </html>

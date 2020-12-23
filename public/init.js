@@ -151,14 +151,103 @@ window.onload = function () {
   document.getElementById("excelFile").addEventListener("change", handle_fr);
   document.getElementById('deleteChecked').addEventListener("click",deleteCheckedRows);
   document.getElementById('downloadTemplate').addEventListener("click",downloadTemplate);
+  $('.ui.radio.checkbox').checkbox({
+    onChecked:function(){
+
+      var index = $(this).parent().find('input').attr('tabIndex');
+      initSchools(index);
+      
+      
+    }
+  });
+
+  initSchools("0");
   
+ 
+
+}
+function initSchools(index){
+
+  var url;
+
+  switch(index){
+    case "0":
+      url = "http://localhost:8080/suram/school_list/2020년_SW교육_선도학교(전체).xlsx";
+
+      break;
+    case "1":
+
+      url = "http://localhost:8080/suram/school_list/2020년_SW교육_선도학교(초등학교).xlsx";
+
+      break;
+    case "2":
+
+      url = "http://localhost:8080/suram/school_list/2020년_SW교육_선도학교(중학교).xlsx";
+
+
+      break;
+    case "3":
+
+      url = "http://localhost:8080/suram/school_list/2020년_SW교육_선도학교(고등학교).xlsx";
+
+      break;
+  }
+
+  var req = new XMLHttpRequest();
+  req.open("GET", url, true);
+  req.responseType = "arraybuffer";
   
-};
+  req.onload = function(e) {
+    var data = new Uint8Array(req.response);
+    var wb = XLSX.read(data, {type:"array"});
+
+    wb.SheetNames.forEach(function (sheetName) {
+      var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: ["name", "lat", "lng", "color", "info"] });
+      var i;
+      var exelData = new Array();
+      var data;
+
+      for (i = 1; i < rowObj.length; i++) {
+
+        data = new Object();
+        data.lat = Number(rowObj[i].lat);
+        data.lng = Number(rowObj[i].lng);
+        data.name = rowObj[i].name;
+        data.color = color2Hex.get(rowObj[i].color);
+        data.info = rowObj[i].info;
+        data._attributes={
+          className: {
+            
+            column: {
+              palette: [colorMap.get(data.color)]
+              
+            }
+          }
+        };
+        exelData.push(data);
+      }
+      deleteMarkers();
+      mygrid.resetData(exelData);
+      addMarker();
+      
+    });
+   
+
+
+  }
+  
+  req.send();
+
+
+}
 
 function downloadTemplate(){
-  var url = "http://localhost:8080/suram/template.xlsx";
+  var event = document.createEvent('Event');
+  event.initEvent('input', true, true);
 
-  
+  document.getElementById('excelFile').dispatchEvent(event);
+  document.getElementById('excelFile').value = 'C:\Users\swamy\apache-tomcat-9.0.40\webapps\ROOT\suram\template.xlsx';
+  var url = "http://localhost:8080/suram/template.xlsx";
   var req = new XMLHttpRequest();
   req.open("GET", url, true);
   req.responseType = "arraybuffer";
@@ -174,7 +263,7 @@ function downloadTemplate(){
     /* DO SOMETHING WITH workbook HERE */
   }
   
-  req.send();
+  //req.send();
 
 
 
@@ -525,7 +614,7 @@ function handleFile(e) {
 
 function handle_fr(e) {
 
-  console.log(e.target.files);
+  console.log(document.getElementById('excelFile').value);
   var files = e.target.files;
       
     
@@ -541,9 +630,10 @@ function handle_fr(e) {
   var rABS = !!reader.readAsBinaryString;
   reader.onload = function (e) {
     var data = e.target.result;
+    
     if (!rABS) data = new Uint8Array(data);
     var wb = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
-    console.log(wb);
+    
     wb.SheetNames.forEach(function (sheetName) {
       var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: ["name", "lat", "lng", "color", "info"] });
       var i;
