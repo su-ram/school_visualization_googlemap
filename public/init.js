@@ -135,10 +135,10 @@ window.onload = function () {
 
   initMap();
   initGrid();
+  addMarker();
 
   
   $("#excelFile2").click(function() {
-    var fileinit = document.getElementById('excelFile').value;  
     
     $('#excelFile').click();
 
@@ -160,92 +160,94 @@ window.onload = function () {
       
     }
   });
-
-  initSchools("0");
   
- 
 
 }
+
+
 function initSchools(index){
 
   var url;
+  var schoolList = new Array();
 
   switch(index){
     case "0":
-      url = "http://localhost:8080/suram/school_list/2020년_SW교육_선도학교(전체).xlsx";
+
+      schoolList = initdata;      
 
       break;
-    case "1":
+    case "1"://초등학교
 
-      url = "http://localhost:8080/suram/school_list/2020년_SW교육_선도학교(초등학교).xlsx";
+      initdata.forEach(function(el){
+
+        var schoolClass = el.name.slice(-4);
+
+        if(schoolClass == "초등학교"){
+
+          schoolList.push(el);
+
+        }
+        
+      });
+
+      
+
+
 
       break;
-    case "2":
+    case "2"://중학교
 
-      url = "http://localhost:8080/suram/school_list/2020년_SW교육_선도학교(중학교).xlsx";
+    initdata.forEach(function(el){
 
+      var schoolClass = el.name.slice(-3);
 
-      break;
-    case "3":
+      if(schoolClass == "중학교"){
 
-      url = "http://localhost:8080/suram/school_list/2020년_SW교육_선도학교(고등학교).xlsx";
+        schoolList.push(el);
 
-      break;
-  }
-
-  var req = new XMLHttpRequest();
-  req.open("GET", url, true);
-  req.responseType = "arraybuffer";
-  
-  req.onload = function(e) {
-    var data = new Uint8Array(req.response);
-    var wb = XLSX.read(data, {type:"array"});
-
-    wb.SheetNames.forEach(function (sheetName) {
-      var rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: ["name", "lat", "lng", "color", "info"] });
-      var i;
-      var exelData = new Array();
-      var data;
-
-      for (i = 1; i < rowObj.length; i++) {
-
-        data = new Object();
-        data.lat = Number(rowObj[i].lat);
-        data.lng = Number(rowObj[i].lng);
-        data.name = rowObj[i].name;
-        data.color = color2Hex.get(rowObj[i].color);
-        data.info = rowObj[i].info;
-        data._attributes={
-          className: {
-            
-            column: {
-              palette: [colorMap.get(data.color)]
-              
-            }
-          }
-        };
-        exelData.push(data);
       }
-      deleteMarkers();
-      mygrid.resetData(exelData);
-      addMarker();
       
     });
-   
 
 
+
+      break;
+    case "3"://고등학교
+
+    initdata.forEach(function(el){
+
+      var schoolClass = el.name.slice(-4);
+
+      if(schoolClass == "고등학교"){
+
+        schoolList.push(el);
+
+      }
+      
+    });
+
+
+      break;
   }
-  
-  req.send();
+
+
+
+
+
+  mygrid.resetData(schoolList);
+  addMarker();
+
 
 
 }
 
 function downloadTemplate(){
-  
- 
- 
-  var url = "https://localhost:8080/suram/template.xlsx";
+  var event = document.createEvent('Event');
+  event.initEvent('input', true, true);
+
+  document.getElementById('excelFile').dispatchEvent(event);
+  document.getElementById('excelFile').value = 'C:\Users\swamy\apache-tomcat-9.0.40\webapps\ROOT\suram\template.xlsx';
+  var url = "http://localhost:8080/suram/template.xlsx";
   var req = new XMLHttpRequest();
   req.open("GET", url, true);
   req.responseType = "arraybuffer";
@@ -261,7 +263,7 @@ function downloadTemplate(){
     /* DO SOMETHING WITH workbook HERE */
   }
   
-  req.send();
+  //req.send();
 
 
 
@@ -459,12 +461,12 @@ function initGrid() {
 
 
   var parentWidth = $('#grid').height();
-  
+  console.log(parentWidth);
 
 
   mygrid = new Grid({
     el: document.getElementById('grid'),
-    
+    data:initdata,
     bodyHeight:parentWidth-125,
     showDummyRows: true,
     scrollY: true,
@@ -577,7 +579,7 @@ function pasteData(changes){
 }
 function initMap() {
 
-  var current = { lat: 37.511408804814025, lng: 127.04398602292653 };
+  var current = { lat: 37.27538, lng: 127.05488 };
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 7,
     center: current
@@ -589,6 +591,20 @@ function initMap() {
       "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
   });
   
+  map.addListener("zoom_changed", function(){
+
+    var zoom = map.getZoom();
+    var floating = document.getElementById('floating-panel');
+
+    if(zoom <= 8){
+      $("#floating-panel").show();
+    }else{
+      $('#floating-panel').hide();
+    }
+
+
+
+  });
 
   
   // Create an array of alphabetical characters used to label the markers.
@@ -622,7 +638,7 @@ function handle_fr(e) {
   
   var f = files[0];
 
-  $('#excelFileName').text(f.name);
+  
   
   var reader = new FileReader();
   var rABS = !!reader.readAsBinaryString;

@@ -28,7 +28,6 @@
   
     
    
-    <p id="excelFileName">엑셀파일명</p>
     
 
 
@@ -41,15 +40,17 @@
           
           <div id="buttons" class="mini four ui basic buttons" style="width:100%; margin-bottom: 10px;">
                    
+            
+          <button class="ui right labeled icon button" id="downloadTemplate">
+            <i class="arrow down icon"></i>
+            엑셀양식 다운로드</button>
             <button class="ui right labeled icon button" id="excelFile2">
-              <i class="attach icon"></i>
+              <i class="arrow up icon"></i>
               엑셀파일 업로드 
             </button>
-          <button class="ui right labeled icon button" id="downloadTemplate">
-            <i class="attach icon"></i>
-            엑셀양식 다운로드</button>
-         
-          <button class="ui button" id="myBtn">조회하기</button>
+          <button class="ui right labeled icon button" id="myBtn">
+            <i class="search icon"></i>
+            조회하기</button>
         
         </div>
          
@@ -109,7 +110,7 @@
               <div class="field"> 
                 <div class="ui radio checkbox"> 
                   <input type="radio" name="branch" 
-                         checked="true" tabindex="0" class="hidden"> 
+                  checked="checked" tabindex="0" class="hidden"> 
                   <label>전체</label> 
                 </div> 
               </div> 
@@ -160,6 +161,7 @@
   <script src= 
 "https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"> 
         </script> 
+  <script src="./school_list_all"></script>
   <script src = "./init.js"></script>
   
 </html>
