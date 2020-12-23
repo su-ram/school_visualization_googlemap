@@ -242,12 +242,10 @@ function initSchools(index){
 }
 
 function downloadTemplate(){
-  var event = document.createEvent('Event');
-  event.initEvent('input', true, true);
-
-  document.getElementById('excelFile').dispatchEvent(event);
-  document.getElementById('excelFile').value = 'C:\Users\swamy\apache-tomcat-9.0.40\webapps\ROOT\suram\template.xlsx';
-  var url = "http://localhost:8080/suram/template.xlsx";
+  
+ 
+ 
+  var url = "https://localhost:8080/suram/template.xlsx";
   var req = new XMLHttpRequest();
   req.open("GET", url, true);
   req.responseType = "arraybuffer";
@@ -263,7 +261,7 @@ function downloadTemplate(){
     /* DO SOMETHING WITH workbook HERE */
   }
   
-  //req.send();
+  req.send();
 
 
 
@@ -461,12 +459,12 @@ function initGrid() {
 
 
   var parentWidth = $('#grid').height();
-  console.log(parentWidth);
+  
 
 
   mygrid = new Grid({
     el: document.getElementById('grid'),
-    data: locations,
+    
     bodyHeight:parentWidth-125,
     showDummyRows: true,
     scrollY: true,

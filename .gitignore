@@ -67,3 +67,8 @@ node_modules/
 
 #xlsx
 public/*.xlsx
+public/school_list/*
+
+#css
+public/Semantic-UI-master/
+
