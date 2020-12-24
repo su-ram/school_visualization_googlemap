@@ -110,21 +110,21 @@ var mygrid;
 var markers = [];
 var markerCluster; 
 var colorMap = new Map()
-colorMap.set('#ab4642','red');
-colorMap.set('#dc9656', 'orange');
-colorMap.set('#f7ca88','yellow');
-colorMap.set('#a1b56c','green');
-colorMap.set('#86c1b9','blue');
-colorMap.set('#7cafc2','navy');
-colorMap.set('#ba8baf','purple');
+colorMap.set('#F60000','red');
+colorMap.set('#FF8C00', 'orange');
+colorMap.set('#FFD700','yellow');
+colorMap.set('#4DE94C','green');
+colorMap.set('#4aa0f0','blue');
+colorMap.set('#154b75','navy');
+colorMap.set('#B413EC','purple');
 var color2Hex = new Map() 
-color2Hex.set('빨', '#ab4642');
-color2Hex.set('주', '#dc9656');
-color2Hex.set('노', '#f7ca88');
-color2Hex.set('초', '#a1b56c');
-color2Hex.set('파', '#86c1b9');
-color2Hex.set('남', '#7cafc2');
-color2Hex.set('보', '#ba8baf');
+color2Hex.set('빨', '#F60000');
+color2Hex.set('주', '#FF8C00');
+color2Hex.set('노', '#FFD700');
+color2Hex.set('초', '#4DE94C');
+color2Hex.set('파', '#4aa0f0');
+color2Hex.set('남', '#154b75');
+color2Hex.set('보', '#B413EC');
 
 var initGridData = new Array();
 
@@ -161,34 +161,39 @@ window.onload = function () {
     }
   });
   
+ 
 
 }
+function colorSetting(dataList){
 
+  dataList.forEach(function(data){
 
+    data.color = color2Hex.get(data.color);
+    data._attributes={
+      className: {
+        
+        column: {
+          palette: [colorMap.get(data.color)]
+          
+        }
+      }
+    };
+  });
+  return dataList;
+}
 function initSchools(index){
 
-  var url;
   var schoolList = new Array();
 
   switch(index){
     case "0":
 
-      schoolList = initdata;      
+      schoolList = school_all;  
 
       break;
     case "1"://초등학교
 
-      initdata.forEach(function(el){
-
-        var schoolClass = el.name.slice(-4);
-
-        if(schoolClass == "초등학교"){
-
-          schoolList.push(el);
-
-        }
-        
-      });
+      schoolList = school_elem;
 
       
 
@@ -197,34 +202,13 @@ function initSchools(index){
       break;
     case "2"://중학교
 
-    initdata.forEach(function(el){
-
-      var schoolClass = el.name.slice(-3);
-
-      if(schoolClass == "중학교"){
-
-        schoolList.push(el);
-
-      }
-      
-    });
-
+      schoolList = school_mid;
 
 
       break;
     case "3"://고등학교
 
-    initdata.forEach(function(el){
-
-      var schoolClass = el.name.slice(-4);
-
-      if(schoolClass == "고등학교"){
-
-        schoolList.push(el);
-
-      }
-      
-    });
+      schoolList = school_high;
 
 
       break;
@@ -232,9 +216,9 @@ function initSchools(index){
 
 
 
-
-
-  mygrid.resetData(schoolList);
+  
+  
+  mygrid.resetData(colorSetting(schoolList));
   addMarker();
 
 
@@ -242,11 +226,9 @@ function initSchools(index){
 }
 
 function downloadTemplate(){
-  var event = document.createEvent('Event');
-  event.initEvent('input', true, true);
-
-  document.getElementById('excelFile').dispatchEvent(event);
-  document.getElementById('excelFile').value = 'C:\Users\swamy\apache-tomcat-9.0.40\webapps\ROOT\suram\template.xlsx';
+  
+  
+  
   var url = "http://localhost:8080/suram/template.xlsx";
   var req = new XMLHttpRequest();
   req.open("GET", url, true);
@@ -263,7 +245,7 @@ function downloadTemplate(){
     /* DO SOMETHING WITH workbook HERE */
   }
   
-  //req.send();
+  req.send();
 
 
 
@@ -391,6 +373,8 @@ function addMarker() {
      
       marker.setIcon({url:iconUrl});
 
+      
+
     }
     
     if(posArray[i].info != null){
@@ -400,6 +384,7 @@ function addMarker() {
         content: contentString
       });
 
+      
       marker.addListener("click", function () {
         infowindow.open(map, marker);
       });
@@ -466,8 +451,8 @@ function initGrid() {
 
   mygrid = new Grid({
     el: document.getElementById('grid'),
-    data:initdata,
-    bodyHeight:parentWidth-125,
+    data:colorSetting(school_all),
+    bodyHeight:parentWidth-155,
     showDummyRows: true,
     scrollY: true,
     rowHeaders: [
@@ -495,7 +480,8 @@ function initGrid() {
     {
       header: '학교명',
       name: 'name',
-      editor: 'text'
+      editor: 'text',
+      align:'left'
     }, {
       header: '위도',
       name: 'lat',
@@ -528,6 +514,18 @@ function initGrid() {
 
     columnOptions: {
       resizable: true
+    }
+    ,
+    summary: {
+      height: 30,
+      position: 'bottom', // or 'top'
+      columnContent: {
+       name : {
+          template: function(valueMap) {
+            return '총 '+valueMap.cnt +' 개';
+          }
+        }
+      }
     }
     
 
@@ -578,8 +576,8 @@ function pasteData(changes){
 
 }
 function initMap() {
-
-  var current = { lat: 37.27538, lng: 127.05488 };
+  
+  var current = { lat: 36.123504364789376, lng: 127.61773204206187 };
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 7,
     center: current
@@ -594,7 +592,6 @@ function initMap() {
   map.addListener("zoom_changed", function(){
 
     var zoom = map.getZoom();
-    var floating = document.getElementById('floating-panel');
 
     if(zoom <= 8){
       $("#floating-panel").show();
