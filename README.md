@@ -1,7 +1,7 @@
 # 구글 map API를 이용한 초중고등학교 시각화 페이지 구축
 
 - 링크 
-    - https://bookcoja.web.app/
+    - https://su-ram.github.io/school_visualization_googlemap/public/
     
 - 페이지 구조
 
