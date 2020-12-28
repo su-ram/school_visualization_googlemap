@@ -81,15 +81,7 @@ function colorSetting(dataList){
     
     }
     
-    
-    function deleteAllRows(){
-    // 그리드의 모든 로우 삭제 
-    
-      mygrid.clear();
-      mygrid.resetData(createInitRows(0));
-      deleteMarkers();
-    
-    }
+
     
     function downloadTemplate(){
     // '엑셀양식 다운로드' 버튼 누르면 실행되는 함수. 
