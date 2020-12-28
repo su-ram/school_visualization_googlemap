@@ -65,8 +65,7 @@ function initMap() {
       deleteMarkers();
     
     
-      var location;
-      var marker;
+      
       var posArray = mygrid.getData();
       var i;
     
@@ -98,6 +97,8 @@ function initMap() {
          
         });
       }
+        var location;
+        var marker;
     
         if(posArray[i].color != null){
     
